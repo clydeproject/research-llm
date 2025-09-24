@@ -3,24 +3,22 @@ version: '3.8'
 services:
   research-llm:
     image: vllm/vllm-openai:latest
+    container_name: research-llm
     ports:
       - "8000:8000"
     environment:
       - HF_HOME=/mnt/model-storage/huggingface
+      - TRANSFORMERS_CACHE=/mnt/model-storage/huggingface
     volumes:
-      - model-storage:/mnt/model-storage
+      - ./model-storage:/mnt/model-storage
     deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
-        preferences:
-          - spread: node.id
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    shm_size: 4g
     command: >
       --model openai/gpt-oss-120b
       --tensor-parallel-size 2
@@ -29,8 +27,5 @@ services:
       --max-model-len 131072
       --host 0.0.0.0
       --port 8000
-
-volumes:
-  model-storage:
-    driver: local
+    restart: unless-stopped
 
