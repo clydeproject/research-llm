@@ -8,6 +8,7 @@ services:
     environment:
       - HF_HOME=/mnt/model-storage/huggingface
       - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0,1
     volumes:
       - model-storage:/mnt/model-storage
     deploy:
