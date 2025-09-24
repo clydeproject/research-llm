@@ -7,7 +7,7 @@ A Docker Compose setup for running vLLM with OpenAI GPT-OSS-120B model.
 ### Docker Compose (Single Node)
 ```bash
 # Start the service
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Docker Swarm (Multi-Node)
