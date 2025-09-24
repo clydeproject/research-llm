@@ -37,10 +37,10 @@ docker service ps research-llm_research-llm
 
 - **Service URL**: http://localhost:8000
 - **View logs**: 
-  - Compose: `docker-compose logs -f research-llm`
+  - Compose: `docker compose logs -f research-llm`
   - Swarm: `docker service logs -f research-llm_research-llm`
 - **Stop service**: 
-  - Compose: `docker-compose down`
+  - Compose: `docker compose down`
   - Swarm: `docker stack rm research-llm`
 
 ## Configuration
