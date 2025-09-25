@@ -1,28 +1,27 @@
-services:
-  research-llm:
-    image: vllm/vllm-openai:latest
-    container_name: research-llm
-    ports:
-      - "8000:8000"
-    environment:
-      - HF_HOME=/mnt/model-storage/huggingface
-      - TRANSFORMERS_CACHE=/mnt/model-storage/huggingface
-    volumes:
-      - /mnt/model-storage:/mnt/model-storage
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    shm_size: 4g
-    command: >
-      --model openai/gpt-oss-120b
-      --tensor-parallel-size 2
-      --dtype bfloat16
-      --gpu-memory-utilization 0.90
-      --max-model-len 131072
-      --host 0.0.0.0
-      --port 8000
-    restart: unless-stopped
+research-llm:
+  image: vllm/vllm-openai:latest
+  container_name: research-llm
+  ports:
+    - "8000:8000"
+  environment:
+    - HF_HOME=/mnt/model-storage/huggingface
+    - TRANSFORMERS_CACHE=/mnt/model-storage/huggingface
+  volumes:
+    - /var/model-storage:/mnt/model-storage
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+  shm_size: 4g
+  command: >
+    --model /mnt/model-storage/gpt-oss-120b
+    --tensor-parallel-size 2
+    --dtype bfloat16
+    --gpu-memory-utilization 0.90
+    --max-model-len 131072
+    --host 0.0.0.0
+    --port 8000
+  restart: unless-stopped
